@@ -1,0 +1,595 @@
+{
+  "references": [
+    {
+      "id": "travel-valley-resort",
+      "category": "travel",
+      "title": "Resor butik dengan form pesan",
+      "image": "/layout-references/travel-valley-resort-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "travel-ocean-voyage",
+      "category": "travel",
+      "title": "Kapal pesiar mewah",
+      "image": "/layout-references/travel-ocean-voyage-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "travel-eco-hotel",
+      "category": "travel",
+      "title": "Hotel ramah lingkungan bercerita",
+      "image": "/layout-references/travel-eco-hotel-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "centered-saas-landing",
+      "category": "saas",
+      "title": "Landing SaaS hero tengah",
+      "image": "/layout-references/centered-saas-landing-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "travel-bespoke-cinematic",
+      "category": "travel",
+      "title": "Perancang perjalanan sinematik",
+      "image": "/layout-references/travel-bespoke-cinematic-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "travel-group-tours",
+      "category": "travel",
+      "title": "Katalog tur kelompok",
+      "image": "/layout-references/travel-group-tours-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "travel-wild-coast",
+      "category": "travel",
+      "title": "Resor alam liar dua destinasi",
+      "image": "/layout-references/travel-wild-coast-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "travel-creative-village",
+      "category": "travel",
+      "title": "Destinasi kreatif dengan agenda",
+      "image": "/layout-references/travel-creative-village-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "travel-minimal-retreat",
+      "category": "travel",
+      "title": "Retreat minimalis multi-lokasi",
+      "image": "/layout-references/travel-minimal-retreat-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "travel-editorial-agency",
+      "category": "travel",
+      "title": "Agen perjalanan editorial",
+      "image": "/layout-references/travel-editorial-agency-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "travel-tourism-board",
+      "category": "travel",
+      "title": "Situs resmi destinasi",
+      "image": "/layout-references/travel-tourism-board-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "booking-salon-marketplace",
+      "category": "booking",
+      "title": "Marketplace booking salon & spa",
+      "image": "/layout-references/booking-salon-marketplace-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "booking-restaurant-slots",
+      "category": "booking",
+      "title": "Reservasi restoran dengan slot jam",
+      "image": "/layout-references/booking-restaurant-slots-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "booking-scheduling-saas",
+      "category": "booking",
+      "title": "SaaS penjadwalan dengan kalender",
+      "image": "/layout-references/booking-scheduling-saas-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "booking-beauty-clinic",
+      "category": "booking",
+      "title": "Klinik kecantikan dengan booking online",
+      "image": "/layout-references/booking-beauty-clinic-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "booking-fitness-class",
+      "category": "booking",
+      "title": "Studio fitness dengan kelas pertama",
+      "image": "/layout-references/booking-fitness-class-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "booking-sport-court",
+      "category": "booking",
+      "title": "Sewa lapangan & komunitas olahraga",
+      "image": "/layout-references/booking-sport-court-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "booking-hospital-doctor",
+      "category": "booking",
+      "title": "Janji dokter rumah sakit",
+      "image": "/layout-references/booking-hospital-doctor-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "wedding-tropical-garden",
+      "category": "wedding",
+      "title": "Undangan taman tropis",
+      "image": "/layout-references/wedding-tropical-garden-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "wedding-javanese-arch",
+      "category": "wedding",
+      "title": "Undangan adat Jawa berlengkung",
+      "image": "/layout-references/wedding-javanese-arch-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "wedding-minimal-peek",
+      "category": "wedding",
+      "title": "Undangan minimalis foto mengintip",
+      "image": "/layout-references/wedding-minimal-peek-840.webp",
+      "kind": "reference"
+    },
+    {
+      "id": "wedding-destination-site",
+      "category": "wedding",
+      "title": "Situs destination wedding",
+      "image": "/layout-references/wedding-destination-site-840.webp",
+      "kind": "reference"
+    }
+  ],
+  "foundations": [
+    {
+      "id": "ramp",
+      "category": "Fondasi sistem",
+      "title": "Ramp",
+      "description": "Operasional finansial dengan lembar putih, tinta pekat, dan sinyal lime yang tegas.",
+      "kind": "foundation",
+      "image": "/design-references/ramp/viewport.png"
+    },
+    {
+      "id": "cal-com",
+      "category": "Fondasi sistem",
+      "title": "Cal.com",
+      "description": "Kurasi SaaS penjadwalan: grid presisi, dashboard putih, dan Cal Sans open-source.",
+      "kind": "foundation",
+      "image": "/design-references/cal.com/viewport.png"
+    },
+    {
+      "id": "raycast",
+      "category": "Fondasi sistem",
+      "title": "Raycast",
+      "description": "Kurasi command SaaS: workflow orbit, spektrum extension, dan dashboard keyboard-first.",
+      "kind": "foundation",
+      "image": "/design-references/raycast/viewport.png"
+    },
+    {
+      "id": "railway",
+      "category": "Fondasi sistem",
+      "title": "Railway",
+      "description": "Kurasi workflow SaaS: flow rail, observability, dan panel violet yang composable.",
+      "kind": "foundation",
+      "image": "/design-references/railway/viewport.png"
+    },
+    {
+      "id": "intercom",
+      "category": "Fondasi sistem",
+      "title": "Intercom",
+      "description": "Kurasi support SaaS: conversation spine, cobalt fokus, dan workspace tanpa bayangan.",
+      "kind": "foundation",
+      "image": "/design-references/intercom/viewport.png"
+    },
+    {
+      "id": "attio",
+      "category": "Fondasi sistem",
+      "title": "Attio",
+      "description": "Kurasi workspace data: record grid, seleksi presisi, dan hover responsif.",
+      "kind": "foundation",
+      "image": "/design-references/attio/viewport.png"
+    },
+    {
+      "id": "miro",
+      "category": "Fondasi sistem",
+      "title": "Miro",
+      "description": "Kurasi kolaborasi visual: decision field, artefak multicolor, dan state lengkap.",
+      "kind": "foundation",
+      "image": "/design-references/miro/viewport.png"
+    },
+    {
+      "id": "figma",
+      "category": "Fondasi sistem",
+      "title": "Figma",
+      "description": "Kurasi delivery SaaS: handoff loop, inspeksi artefak, dan checkpoint multicolor.",
+      "kind": "foundation",
+      "image": "/design-references/figma/viewport.png"
+    },
+    {
+      "id": "lattice",
+      "category": "Fondasi sistem",
+      "title": "Lattice",
+      "description": "Kurasi continuous improvement: progress weave, feedback, dan bukti kemajuan.",
+      "kind": "foundation",
+      "image": "/design-references/lattice/viewport.png"
+    },
+    {
+      "id": "harvest",
+      "category": "Fondasi sistem",
+      "title": "Harvest",
+      "description": "Kurasi produktivitas hangat: ledger kerja, kanvas krem, dan sinyal oranye terarah.",
+      "kind": "foundation",
+      "image": "/design-references/harvest/viewport.png"
+    },
+    {
+      "id": "seline",
+      "category": "Fondasi sistem",
+      "title": "Seline",
+      "description": "Kurasi analytics jernih: insight lens, chart biru, dan dashboard putih yang ringan.",
+      "kind": "foundation",
+      "image": "/design-references/seline/viewport.png"
+    },
+    {
+      "id": "dimension",
+      "category": "Fondasi sistem",
+      "title": "Dimension",
+      "description": "Kurasi orkestrasi waktu: briefing axis, panel malam, dan konteks biru atmosferik.",
+      "kind": "foundation",
+      "image": "/design-references/dimension/viewport.png"
+    },
+    {
+      "id": "mintlify",
+      "category": "Fondasi sistem",
+      "title": "Mintlify",
+      "description": "Kurasi knowledge ops: provenance thread, serif editorial, dan workbench mint yang presisi.",
+      "kind": "foundation",
+      "image": "/design-references/mintlify/viewport.png"
+    },
+    {
+      "id": "voiceflow",
+      "category": "Fondasi sistem",
+      "title": "Voiceflow",
+      "description": "Service ops: resolution loop, panggung outcome, dan sinyal biru yang terukur.",
+      "kind": "foundation",
+      "image": "/design-references/voiceflow/viewport.png"
+    },
+    {
+      "id": "user-interviews",
+      "category": "Fondasi sistem",
+      "title": "User Interviews",
+      "description": "Research ops: sample stitch, editorial manusia, dan cohort yang dapat diaudit.",
+      "kind": "foundation",
+      "image": "/design-references/userinterviews/viewport.png"
+    },
+    {
+      "id": "programa",
+      "category": "Fondasi sistem",
+      "title": "Programa",
+      "description": "Studio ops: specimen stack, editorial hangat, dan keputusan kreatif yang terlacak.",
+      "kind": "foundation",
+      "image": "/design-references/programa/viewport.png"
+    },
+    {
+      "id": "caldera",
+      "category": "Fondasi sistem",
+      "title": "Caldera",
+      "description": "Network ops: density relay, tipografi padat, dan kapasitas yang terbaca.",
+      "kind": "foundation",
+      "image": "/design-references/caldera/viewport.png"
+    },
+    {
+      "id": "calendly",
+      "category": "Fondasi sistem",
+      "title": "Calendly",
+      "description": "Meeting ops: workaround dock, fase kerja, dan handoff yang terlihat.",
+      "kind": "foundation",
+      "image": "/design-references/calendly/viewport.png"
+    },
+    {
+      "id": "ditto",
+      "category": "Fondasi sistem",
+      "title": "Ditto",
+      "description": "Assurance ops: evidence matrix, serif editorial, dan urgensi kuning.",
+      "kind": "foundation",
+      "image": "/design-references/ditto/viewport.png"
+    }
+  ],
+  "templates": [
+    {
+      "id": "sales-crm-react",
+      "category": "Template",
+      "title": "Sales CRM (React)",
+      "description": "Template dashboard siap pakai untuk memulai project baru.",
+      "image": "/layout-references/centered-saas-landing-840.webp",
+      "kind": "template"
+    },
+    {
+      "id": "nuvio-operations-dashboard-react",
+      "category": "Template",
+      "title": "Nuvio — Operations Dashboard (React)",
+      "description": "Template dashboard siap pakai untuk memulai project baru.",
+      "image": "/layout-references/centered-saas-landing-840.webp",
+      "kind": "template"
+    },
+    {
+      "id": "crm-dashboard-react",
+      "category": "Template",
+      "title": "CRM Dashboard (React)",
+      "description": "Template dashboard siap pakai untuk memulai project baru.",
+      "image": "/layout-references/centered-saas-landing-840.webp",
+      "kind": "template"
+    },
+    {
+      "id": "sales-crm-compact-ledger",
+      "category": "Template",
+      "title": "Sales CRM — Compact Ledger",
+      "description": "Template dashboard siap pakai untuk memulai project baru.",
+      "image": "/layout-references/centered-saas-landing-840.webp",
+      "kind": "template"
+    },
+    {
+      "id": "clean-modern-dashboard",
+      "category": "Template",
+      "title": "Clean Modern Dashboard",
+      "description": "Template dashboard siap pakai untuk memulai project baru.",
+      "image": "/layout-references/centered-saas-landing-840.webp",
+      "kind": "template"
+    },
+    {
+      "id": "marketing-sales-dashboard",
+      "category": "Template",
+      "title": "Marketing Sales Dashboard",
+      "description": "Template dashboard siap pakai untuk memulai project baru.",
+      "image": "/layout-references/centered-saas-landing-840.webp",
+      "kind": "template"
+    },
+    {
+      "id": "dashboard-crm",
+      "category": "Template",
+      "title": "Dashboard CRM",
+      "description": "Template dashboard siap pakai untuk memulai project baru.",
+      "image": "/layout-references/centered-saas-landing-840.webp",
+      "kind": "template"
+    },
+    {
+      "id": "dashboard-metoric",
+      "category": "Template",
+      "title": "Dashboard Metoric",
+      "description": "Template dashboard siap pakai untuk memulai project baru.",
+      "image": "/layout-references/centered-saas-landing-840.webp",
+      "kind": "template"
+    },
+    {
+      "id": "dashboard-sales-gratis",
+      "category": "Template",
+      "title": "Dashboard Sales GRATIS",
+      "description": "Template dashboard siap pakai untuk memulai project baru.",
+      "image": "/layout-references/centered-saas-landing-840.webp",
+      "kind": "template"
+    },
+    {
+      "id": "dashboard-template-1",
+      "category": "Template",
+      "title": "Dashboard Template #1",
+      "description": "Template dashboard siap pakai untuk memulai project baru.",
+      "image": "/layout-references/centered-saas-landing-840.webp",
+      "kind": "template"
+    },
+    {
+      "id": "09a51803-c544-4139-8a3d-f0213be23bcc",
+      "category": "Template",
+      "title": "Sales CRM (React)",
+      "description": "Template dashboard siap pakai.",
+      "image": "/project-templates/09a51803-c544-4139-8a3d-f0213be23bcc.webp",
+      "kind": "template"
+    },
+    {
+      "id": "c24213b8-ff80-4307-bb02-dd5c5bcf2b8a",
+      "category": "Template",
+      "title": "Nuvio — Operations Dashboard (React)",
+      "description": "Template dashboard siap pakai.",
+      "image": "/project-templates/c24213b8-ff80-4307-bb02-dd5c5bcf2b8a.webp",
+      "kind": "template"
+    },
+    {
+      "id": "6f1d9c2e-3b7a-4e58-9a41-c8d2e5f7b031",
+      "category": "Template",
+      "title": "CRM Dashboard (React)",
+      "description": "Template dashboard siap pakai.",
+      "image": "/project-templates/6f1d9c2e-3b7a-4e58-9a41-c8d2e5f7b031.webp",
+      "kind": "template"
+    },
+    {
+      "id": "1c819ac3-f876-41a7-8327-5b2fdb53f469",
+      "category": "Template",
+      "title": "Sales CRM — Compact Ledger",
+      "description": "Template dashboard siap pakai.",
+      "image": "/project-templates/1c819ac3-f876-41a7-8327-5b2fdb53f469.webp",
+      "kind": "template"
+    },
+    {
+      "id": "be36857a-d426-404f-8d5a-d71c9457654d",
+      "category": "Template",
+      "title": "Clean Modern Dashboard",
+      "description": "Template dashboard siap pakai.",
+      "image": "/project-templates/be36857a-d426-404f-8d5a-d71c9457654d.webp",
+      "kind": "template"
+    },
+    {
+      "id": "19151854-5417-4cc1-82d8-76034ddd8279",
+      "category": "Template",
+      "title": "Marketing Sales Dashboard",
+      "description": "Template dashboard siap pakai.",
+      "image": "/project-templates/19151854-5417-4cc1-82d8-76034ddd8279.webp",
+      "kind": "template"
+    },
+    {
+      "id": "4ae30df4-d3c5-4a43-93fc-64294c16a5ee",
+      "category": "Template",
+      "title": "Dashboard CRM",
+      "description": "Template dashboard siap pakai.",
+      "image": "/project-templates/4ae30df4-d3c5-4a43-93fc-64294c16a5ee.webp",
+      "kind": "template"
+    },
+    {
+      "id": "6f9feb5c-5bdd-4d04-8e59-f40ed6ce72ca",
+      "category": "Template",
+      "title": "Dashboard Metoric",
+      "description": "Template dashboard siap pakai.",
+      "image": "/project-templates/6f9feb5c-5bdd-4d04-8e59-f40ed6ce72ca.webp",
+      "kind": "template"
+    },
+    {
+      "id": "2c8cf6dd-96bf-499f-9a3d-e0b2fa202745",
+      "category": "Template",
+      "title": "Dashboard Sales GRATIS",
+      "description": "Template dashboard siap pakai.",
+      "image": "/project-templates/2c8cf6dd-96bf-499f-9a3d-e0b2fa202745.webp",
+      "kind": "template"
+    },
+    {
+      "id": "1998c6f4-8715-421d-8778-f7a8a057ac02",
+      "category": "Template",
+      "title": "Dashboard Template #1",
+      "description": "Template dashboard siap pakai.",
+      "image": "/project-templates/1998c6f4-8715-421d-8778-f7a8a057ac02.webp",
+      "kind": "template"
+    }
+  ],
+  "updates": [
+    {
+      "date": "23 September 2026",
+      "category": "Canvas",
+      "status": "Dirilis",
+      "title": "Canvas AI tersedia tanpa kredit di paket Gratis",
+      "description": "Mulai membuat desain dengan Canvas AI di paket Gratis, tanpa perlu saldo kredit.",
+      "bullets": [
+        "Buat dan edit halaman dengan Canvas AI tanpa kredit dalam kuota paket Gratis.",
+        "Seluruh halaman bawaan template gratis tetap dapat digunakan.",
+        "Lihat sisa kuota halaman sebelum menyetujui pembuatan halaman baru."
+      ]
+    },
+    {
+      "date": "15 September 2026",
+      "category": "Canvas",
+      "status": "Dirilis",
+      "title": "Canvas AI dengan preview langsung",
+      "description": "Buat halaman lewat percakapan dan ikuti hasilnya langsung di canvas.",
+      "bullets": [
+        "Tulis kebutuhan desain langsung lewat percakapan di canvas.",
+        "Lihat preview halaman terbentuk selama AI bekerja.",
+        "Buka kembali percakapan dan status pekerjaan yang tersimpan di project."
+      ]
+    },
+    {
+      "date": "13 September 2026",
+      "category": "Canvas",
+      "status": "Dirilis",
+      "title": "Catatan langsung di canvas",
+      "description": "Simpan ide, arahan, dan pengingat di dekat desain yang sedang dikerjakan.",
+      "bullets": [
+        "Tambahkan catatan langsung di samping halaman desain.",
+        "Pindahkan dan ubah ukuran catatan sesuai kebutuhan.",
+        "Catatan tersimpan bersama project untuk melanjutkan pekerjaan berikutnya."
+      ]
+    },
+    {
+      "date": "12 September 2026",
+      "category": "Canvas",
+      "status": "Dirilis",
+      "title": "Katalog template dan referensi layout",
+      "description": "Mulai lebih cepat dengan template project dan referensi layout yang bisa dibawa ke canvas.",
+      "bullets": [
+        "Mulai project dari template yang sudah memiliki susunan halaman.",
+        "Jelajahi katalog referensi layout untuk menemukan arah desain.",
+        "Letakkan referensi layout di canvas sebagai acuan saat bekerja."
+      ]
+    },
+    {
+      "date": "1 September 2026",
+      "category": "Canvas",
+      "status": "Dirilis",
+      "title": "Frame canvas kini stabil saat ukuran layar berubah",
+      "description": "Frame kini tetap tenang dan konsisten saat kamu berpindah ukuran tampilan.",
+      "bullets": [
+        "Frame tidak lagi berubah tinggi berulang kali saat ukuran layar diganti.",
+        "Posisi elemen tetap akurat selama ukuran tampilan berubah."
+      ]
+    },
+    {
+      "date": "1 September 2026",
+      "category": "Canvas",
+      "status": "Dirilis",
+      "title": "Preview canvas kini lebih akurat",
+      "description": "Preview halaman dan komponen kini tampil konsisten di setiap ukuran layar.",
+      "bullets": [
+        "Preview menampilkan ukuran yang sesuai dengan ukuran layar aktif.",
+        "Komponen tetap terlihat utuh di ruang preview.",
+        "Workspace dashboard kini memiliki halaman Activity."
+      ]
+    },
+    {
+      "date": "1 September 2026",
+      "category": "Review",
+      "status": "Dirilis",
+      "title": "Komentar canvas kini menyimpan konteks",
+      "description": "Komentar elemen dan gambar kini tersimpan bersama konteksnya, sehingga feedback lebih mudah ditindaklanjuti.",
+      "bullets": [
+        "Satu sidebar menampilkan komentar elemen dan gambar.",
+        "Elemen yang dipilih tetap tersimpan bersama komentarnya.",
+        "Hanya anggota yang memiliki akses project yang dapat membuka review."
+      ]
+    },
+    {
+      "date": "31 Agustus 2026",
+      "category": "Canvas",
+      "status": "Dirilis",
+      "title": "Navigasi canvas kini lebih terarah",
+      "description": "Memilih halaman, melihat preview, dan mencari referensi layout kini lebih sederhana.",
+      "bullets": [
+        "Pilih satu halaman untuk fokus atau beberapa halaman untuk dikelola bersama.",
+        "Preview frame tetap proporsional saat diperbesar.",
+        "Referensi layout dapat dicari dan disaring berdasarkan kategori."
+      ]
+    },
+    {
+      "date": "31 Agustus 2026",
+      "category": "Fondasi desain",
+      "status": "Dirilis",
+      "title": "10 fondasi referensi baru diterbitkan",
+      "description": "Katalog fondasi kini menawarkan lebih banyak arah visual yang siap diterapkan ke project.",
+      "bullets": [
+        "Pilih dari 10 arah visual baru untuk memulai desain.",
+        "Setiap fondasi sudah disiapkan untuk tampilan desktop dan mobile.",
+        "Tipografi dan gaya komponen tetap konsisten di seluruh halaman."
+      ]
+    },
+    {
+      "date": "30 Agustus 2026",
+      "category": "Review",
+      "status": "Dirilis",
+      "title": "Review visual kini dapat dibuka kembali",
+      "description": "Screenshot, catatan, dan konteks review kini tersimpan bersama di dalam project.",
+      "bullets": [
+        "Buka kembali catatan dan screenshot dari review sebelumnya.",
+        "Setiap komentar tetap terhubung ke desain yang ditinjau.",
+        "Lanjutkan review tanpa menyusun ulang konteks dari awal."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+.env.local
+data/*.sqlite
+data/*.sqlite-wal
+data/*.sqlite-shm
+public/sites/*
+!public/sites/.gitkeep
+*.log
+.DS_Store
