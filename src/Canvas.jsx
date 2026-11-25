@@ -7,7 +7,6 @@ const SUGGESTIONS = ["Ubah warna tombol menjadi hijau", "Tambahkan halaman prici
 
 export default function Canvas({ projectId }) {
   const [project, setProject] = useState(null);
-  const [session, setSession] = useState(undefined);
   const [activeSlug, setActiveSlug] = useState("index");
   const [tab, setTab] = useState("chat");
   const [messages, setMessages] = useState([]);
@@ -29,10 +28,6 @@ export default function Canvas({ projectId }) {
 
   useEffect(() => {
     document.title = "Canvas — DesainPakeAI";
-    get("/api/auth/session").then(data => {
-      setSession(data);
-      if (!data.user) window.location.replace(`/login?redirect=${encodeURIComponent(`/project/${projectId}/prototype`)}`);
-    }).catch(() => window.location.replace("/login"));
     load();
   }, [projectId]);
 

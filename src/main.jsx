@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./app.css";
 import Marketing from "./Marketing.jsx";
-import Login from "./Login.jsx";
 import Projects from "./Projects.jsx";
 import Canvas from "./Canvas.jsx";
 import { get, post } from "./api.js";
@@ -96,8 +95,6 @@ function TemplateOpen() {
       if (!window.localStorage.getItem("dpai:user")) {
         // Session cookies are authoritative; this call still works while unauthenticated.
       }
-      const session = await get("/api/auth/session");
-      if (!session.user) { window.location.replace(`/login?redirect=${encodeURIComponent(`/t/${id}`)}`); return; }
       const { project } = await post(`/api/templates/${encodeURIComponent(id)}/use`, { prompt: `Buat website ${template.title}` });
       window.location.replace(`/project/${project.id}/prototype`);
     }).catch(err => setState(err.message || "Template tidak dapat dibuka."));
@@ -112,7 +109,7 @@ function App() {
   if (pathname === "/galeri") return <Marketing route="galeri" />;
   if (pathname === "/updates") return <Marketing route="updates" />;
   if (pathname === "/templates") return <Marketing route="templates" />;
-  if (pathname === "/login" || pathname === "/admin") return <Login />;
+  if (pathname === "/login" || pathname === "/admin") { window.location.replace("/projects"); return null; }
   if (pathname === "/onboarding") { window.location.replace("/projects"); return null; }
   if (pathname === "/projects") return <Projects />;
   if (pathname === "/project/prototype") return <Canvas projectId="" />;

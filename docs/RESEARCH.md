@@ -86,4 +86,8 @@ The reconstruction implements these shapes plus the additional endpoints needed 
 
 ## Reconstruction addition: user Gemini key menu
 
-The reference settings screen is not publicly observable. To make AI generation usable locally, the reconstruction adds an authenticated “AI Gemini” menu on `/projects` and the canvas. It stores a per-user key in `user_ai_settings`, verifies key/model access with a lightweight Google API metadata request, and prioritizes that key over environment variables. Only a masked key is returned to the client. No reference behavior is claimed for this menu.
+The reference settings screen is not publicly observable. To make AI generation usable locally, the reconstruction adds an “AI Gemini” menu on `/projects` and the canvas. It stores the workspace key in `user_ai_settings`, verifies key/model access with a lightweight Google API metadata request, and prioritizes that key over environment variables. Only a masked key is returned to the client. No reference behavior is claimed for this menu.
+
+## Single-user override
+
+At the owner's request, account login was removed from the reconstruction even though `/login` was observed in the reference. A local workspace user is created automatically, `/login` and `/admin` redirect to `/projects`, and logout/account UI was removed. The observed reference route table above is kept for research accuracy; it does not describe this deliberate local override.

@@ -67,7 +67,7 @@ export default function Marketing({ route }) {
           panel = document.createElement("div");
           panel.id = "marketing-mobile-menu";
           panel.className = "dp-mobile-menu";
-          panel.innerHTML = `<a href="/#capabilities">Fitur</a><a href="/pricing">Harga</a><a href="/galeri">Galeri</a><a href="/updates">Update</a><a href="/projects">Project</a><a href="/login">Masuk</a>`;
+          panel.innerHTML = `<a href="/#capabilities">Fitur</a><a href="/pricing">Harga</a><a href="/galeri">Galeri</a><a href="/updates">Update</a><a href="/projects">Project</a><a href="/projects">Workspace</a>`;
           root.querySelector("header").after(panel);
         }
         const open = panel.classList.toggle("open");
@@ -95,31 +95,23 @@ export default function Marketing({ route }) {
       cleanups.push(() => tile.removeEventListener("click", handler));
     }
 
-    // Pricing CTAs record an intent when signed in, otherwise ask for sign-in first.
-    let cancelled = false;
-    get("/api/auth/session").then(session => {
-      if (cancelled) return;
-      root.querySelectorAll("button, a").forEach(el => {
-        const label = el.textContent.trim();
-        if (!["Pilih Pro", "Pilih Pro + Hosting", "Pilih Bundle"].includes(label)) return;
-        const plan = label === "Pilih Pro" ? "pro" : label === "Pilih Pro + Hosting" ? "pro-hosting" : "bundle";
-        const handler = async event => {
-          event.preventDefault();
-          if (!session.user) {
-            window.location.assign(`/login?redirect=${encodeURIComponent(`/pricing?checkout=${plan}`)}`);
-            return;
-          }
-          try {
-            const result = await post("/api/checkout/intent", { plan });
-            setCheckoutNote(result.note);
-          } catch (err) { setCheckoutNote(err.message); }
-        };
-        el.addEventListener("click", handler);
-        cleanups.push(() => el.removeEventListener("click", handler));
-      });
-    }).catch(() => {});
+    // Pricing CTAs record an intent in the single-user workspace.
+    root.querySelectorAll("button, a").forEach(el => {
+      const label = el.textContent.trim();
+      if (!["Pilih Pro", "Pilih Pro + Hosting", "Pilih Bundle"].includes(label)) return;
+      const plan = label === "Pilih Pro" ? "pro" : label === "Pilih Pro + Hosting" ? "pro-hosting" : "bundle";
+      const handler = async event => {
+        event.preventDefault();
+        try {
+          const result = await post("/api/checkout/intent", { plan });
+          setCheckoutNote(result.note);
+        } catch (err) { setCheckoutNote(err.message); }
+      };
+      el.addEventListener("click", handler);
+      cleanups.push(() => el.removeEventListener("click", handler));
+    });
 
-    return () => { cancelled = true; cleanups.forEach(fn => fn()); };
+    return () => cleanups.forEach(fn => fn());
   }, [route]);
 
   return <>

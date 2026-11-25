@@ -26,7 +26,7 @@ Yang perlu ditambahkan sebelum deploy:
    - Env: `BLOB_READ_WRITE_TOKEN` atau kredensial S3.
 
 3. **AI**
-   - Env `GEMINI_API_KEY` / `OPENAI_API_KEY`, atau pakai menu “AI Gemini” per akun yang sudah ada. Tanpa kunci, engine lokal yang dipakai.
+   - Env `GEMINI_API_KEY` / `OPENAI_API_KEY`, atau pakai menu “AI Gemini” di workspace single-user. Tanpa kunci, engine lokal yang dipakai.
 
 4. **Environment variables di Vercel**
    ```bash
@@ -52,4 +52,4 @@ Simpan volume persisten untuk `data/` dan `public/sites/`.
 
 ## GitHub
 
-Repo sudah disiapkan lokal beserta `.gitignore`, `vercel.json`, dan `api/index.js`. Push ke GitHub memerlukan kredensional Anda (`gh auth login` atau PAT + URL repo); tidak ada token GitHub di environment ini, jadi push belum bisa dilakukan di sini.
+Repo sudah tersedia di `https://github.com/akunsanzz573-ui/desainpakeai-reconstruction` beserta `.gitignore`, `vercel.json`, dan `api/index.js`. Perubahan setelah push perlu di-commit dan di-push ulang dengan token GitHub baru.

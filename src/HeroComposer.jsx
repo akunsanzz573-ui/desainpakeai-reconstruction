@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { get, post } from "./api.js";
+import { post } from "./api.js";
 import { Icon } from "./ui.jsx";
 
 const LOOKS = [
@@ -17,15 +17,10 @@ export default function HeroComposer() {
   const [look, setLook] = useState(LOOKS[0]);
   const [lookOpen, setLookOpen] = useState(false);
   const [prdOpen, setPrdOpen] = useState(false);
-  const [user, setUser] = useState(undefined);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const textRef = useRef(null);
   const valid = text.trim().length >= 20;
-
-  useEffect(() => {
-    get("/api/auth/session").then(d => setUser(d.user)).catch(() => setUser(null));
-  }, []);
 
   useEffect(() => {
     const onDoc = e => {
@@ -46,10 +41,6 @@ export default function HeroComposer() {
       return;
     }
     sessionStorage.setItem("dpai:starter-prompt", JSON.stringify({ text, platform, look: look.id }));
-    if (!user) {
-      window.location.assign(`/login?redirect=${encodeURIComponent("/projects?create=true")}`);
-      return;
-    }
     setBusy(true);
     setError("");
     try {

@@ -5,7 +5,6 @@ import HeroComposer from "./HeroComposer.jsx";
 import AiSettingsButton from "./AiSettings.jsx";
 
 export default function Projects() {
-  const [session, setSession] = useState(undefined);
   const [projects, setProjects] = useState([]);
   const [query, setQuery] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
@@ -23,14 +22,10 @@ export default function Projects() {
   }
 
   useEffect(() => {
-    get("/api/auth/session").then(data => {
-      setSession(data);
-      if (!data.user) { window.location.replace(`/login?redirect=${encodeURIComponent("/projects")}`); return; }
-      load();
-      const handoff = sessionStorage.getItem("dpai:starter-prompt");
-      if (handoff) { try { const p = JSON.parse(handoff); setDraft(p.text || ""); setPlatform(p.platform || "web"); } catch {} }
-      if (new URLSearchParams(window.location.search).get("create") === "true") setCreateOpen(true);
-    }).catch(() => window.location.replace("/login?redirect=/projects"));
+    load();
+    const handoff = sessionStorage.getItem("dpai:starter-prompt");
+    if (handoff) { try { const p = JSON.parse(handoff); setDraft(p.text || ""); setPlatform(p.platform || "web"); } catch {} }
+    if (new URLSearchParams(window.location.search).get("create") === "true") setCreateOpen(true);
   }, []);
 
   async function create(e) {
@@ -66,9 +61,7 @@ export default function Projects() {
       <div className="flex items-center"><a href="/" aria-label="DesainPakeAI — beranda" className="inline-flex shrink-0 items-center gap-1 font-display text-dpai-title-sm font-bold tracking-dpai-display text-dpai-ink no-underline">
         <img src="/brand/mark.svg" alt="" width="133" height="152" className="mr-1.5 h-8 w-7 shrink-0" /><span>desainpake<span className="text-dpai-violet">ai</span></span></a></div>
       <div className="flex items-center gap-3">
-        <span className="hidden text-sm text-dpai-muted sm:block">{session?.user?.email || ""}</span>
         <AiSettingsButton className="inline-flex min-h-10 items-center gap-1.5 rounded-dpai-action border border-dpai-line bg-dpai-desk px-4 text-sm font-medium hover:bg-dpai-line" compact />
-        <button type="button" onClick={async () => { await post("/api/auth/logout"); window.location.assign("/"); }} className="inline-flex min-h-10 items-center rounded-dpai-action border border-dpai-line bg-dpai-desk px-4 text-sm font-medium hover:bg-dpai-line">Keluar</button>
         <button type="button" onClick={() => setCreateOpen(true)} className="inline-flex min-h-10 items-center rounded-dpai-action bg-dpai-violet px-5 text-sm font-semibold text-white shadow-dpai-action hover:bg-dpai-violet-hover">Project baru</button>
       </div>
     </nav></header>

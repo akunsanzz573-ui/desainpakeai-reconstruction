@@ -165,3 +165,17 @@ export function publicUser(user) {
   if (!user) return null;
   return { id: user.id, email: user.email, name: user.name };
 }
+
+// Single-user mode: one local workspace, no sign-in screen.
+// The row is created on first use and reused for every request.
+export function getSingleUser() {
+  const email = "local@desainpakeai.local";
+  let row = db.prepare("SELECT * FROM users WHERE email = ?").get(email);
+  if (!row) {
+    const id = newId();
+    db.prepare("INSERT INTO users (id,email,name,password_hash,created_at) VALUES (?,?,?,?,?)")
+      .run(id, email, "Pengguna Lokal", hashPassword(crypto.randomBytes(24).toString("hex")), now());
+    row = db.prepare("SELECT * FROM users WHERE id = ?").get(id);
+  }
+  return row;
+}

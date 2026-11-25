@@ -28,8 +28,8 @@ Keys can also be entered per account through the “AI Gemini” menu after sign
 
 - Marketing routes `/`, `/pricing`, `/galeri`, `/updates`, `/templates` with the observed public markup, fonts, icons, thumbnails, layout references, and Indonesian copy.
 - Hero composer: prompt validation, App/Web toggle, PRD handoff menu, style menu, starter prompts, template/reference attachment, sign-in handoff, project creation.
-- Email/password registration, login, logout, server sessions in an HTTP-only cookie.
-- “AI Gemini” menu in `/projects` and the canvas: each signed-in user can save, verify, replace, or delete a personal Gemini API key. The key is stored server-side in SQLite and is never returned to the browser; generation and AI chat use it automatically.
+- **Single-user mode:** no sign-in screen. A local workspace user is created automatically on first request; `/login` redirects to `/projects` and the logout/account buttons are removed.
+- “AI Gemini” menu in `/projects` and the canvas: save, verify, replace, or delete the workspace Gemini API key. The key is stored server-side in SQLite and is never returned to the browser; generation and AI chat use it automatically.
 - `/projects`: searchable project list, creation modal, delete, publish, ZIP/HTML export links.
 - `/project/<id>/prototype`: canvas with page list, section outline, device/zoom controls, live iframe preview, AI chat, design tokens, version history/restore, DESIGN.md, exports, and publish dialog.
 - Real SQLite persistence for users, sessions, projects, versions, chat messages, published sites, catalog, updates, reports, and checkout intents.
@@ -40,7 +40,7 @@ Keys can also be entered per account through the “AI Gemini” menu after sign
 
 - `public/` — copied public reference assets (fonts, SVG marks, layout reference images, template thumbnails) and generated published sites.
 - `src/marketing.js` — public marketing HTML captured from the reference pages.
-- `src/*.jsx` — React views for marketing interactions, auth, projects, and canvas.
+- `src/*.jsx` — React views for marketing interactions, projects, and canvas.
 - `server/db.js` — SQLite schema and seeding.
 - `server/model.js` — design model generation and editing; local rules plus optional AI provider.
 - `server/ai.js` — server-only Gemini/OpenAI integration.
@@ -50,7 +50,7 @@ Keys can also be entered per account through the “AI Gemini” menu after sign
 
 ## Honest limitations
 
-- The reference uses Google sign-in. This reconstruction uses email/password because no OAuth client credentials are public. The Google button is visibly disabled and labeled as requiring server credentials.
+- The reference uses Google sign-in. This reconstruction intentionally removes account login entirely for single-user local use; `/login` redirects to the workspace.
 - Checkout is recorded as an intent but no payment provider is configured; no claim of live billing is made.
 - Public publishing uses local `/sites/<slug>` paths, not the reference's custom `.desainpakeai.com` domains.
 - Admin, CLI, and some internal routes from the JS bundle are not reconstructed; they are not publicly observable without authenticated access.

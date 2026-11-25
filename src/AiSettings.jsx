@@ -44,7 +44,7 @@ export default function AiSettingsButton({ className = "dp-top-button", compact 
   }
 
   const stateLabel = !status ? "Memeriksa…"
-    : status.source === "user" ? `Kunci akun aktif (${status.maskedKey})`
+    : status.source === "user" ? `Kunci tersimpan aktif (${status.maskedKey})`
     : status.source === "environment" ? `Kunci environment aktif (${status.provider})`
     : "Belum ada kunci — generator lokal dipakai";
 
@@ -56,7 +56,7 @@ export default function AiSettingsButton({ className = "dp-top-button", compact 
     <Modal open={open} onClose={() => setOpen(false)} title="Pengaturan AI Gemini">
       <div className="dp-ai-settings">
         <div className={`dp-ai-state ${status?.hasKey ? "active" : ""}`} role="status">{stateLabel}</div>
-        <p className="dp-hint">Kunci disimpan di server pada akunmu dan tidak dikirim kembali ke browser. Kunci ini dipakai untuk pembuatan project dan AI chat.</p>
+        <p className="dp-hint">Mode single-user: kunci disimpan di server workspace ini dan tidak dikirim kembali ke browser. Kunci ini dipakai untuk pembuatan project dan AI chat.</p>
         <form className="dp-stack" onSubmit={save}>
           <label>API key Gemini
             <input className="dp-input" type="password" autoComplete="off" spellCheck="false" required

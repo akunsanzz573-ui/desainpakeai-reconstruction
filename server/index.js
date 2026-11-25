@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import JSZip from "jszip";
 import {
   db, hashPassword, verifyPassword, now, newId, createSession, deleteSession,
-  getUserFromToken, parseCookies, publicUser
+  getUserFromToken, parseCookies, publicUser, getSingleUser
 } from "./db.js";
 import { generateSiteModel, editSiteModel, defaultDesignSystem, designMarkdown, makeSiteModel } from "./model.js";
 import { renderProjectHtml, renderPreviewHtml } from "./render.js";
@@ -26,7 +26,7 @@ app.use(express.static(distDir, { index: false, maxAge: 0 }));
 
 app.use((req, _res, next) => {
   const token = parseCookies(req.headers.cookie).dpai_session;
-  req.user = getUserFromToken(token);
+  req.user = getUserFromToken(token) || getSingleUser();
   req.sessionToken = token;
   next();
 });

@@ -3,7 +3,7 @@
 Run with the server already listening on http://localhost:3000:
     python3 tests/flow.py
 """
-import json, urllib.request, urllib.error, http.cookiejar, sys, time
+import json, urllib.request, urllib.error, http.cookiejar, time
 
 BASE = "http://localhost:3000"
 cj = http.cookiejar.CookieJar()
@@ -36,10 +36,8 @@ call("GET", "/api/updates", expect=200)
 call("GET", "/api/gallery", expect=200)
 call("POST", "/api/reports", {"url": ".desainpakeai.com/contoh", "issue": "Lainnya"}, expect=201)
 
-email = "uji-%d@example.com" % time.time()
-call("POST", "/api/auth/register", {"email": email, "password": "rahasia123", "name": "Uji"}, expect=200)
 session = call("GET", "/api/auth/session", expect=200)
-assert session["user"]
+assert session["user"] and session["authenticated"] is True
 call("POST", "/api/checkout/intent", {"plan": "pro"}, expect=201)
 
 created = call("POST", "/api/projects", {"starter": {"prompt": "Buat landing page kedai kopi Senja dengan menu reservasi", "platform": "web", "look": "minimal"}}, expect=201)
@@ -65,5 +63,4 @@ assert "Kopi Senja" in site
 call("GET", "/api/gallery", expect=200)
 call("POST", f"/api/projects/{pid}/unpublish", {}, expect=200)
 call("DELETE", f"/api/projects/{pid}", expect=200)
-call("POST", "/api/auth/logout", {}, expect=200)
 print("ALL FLOW TESTS PASSED")
