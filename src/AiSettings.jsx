@@ -6,7 +6,7 @@ export default function AiSettingsButton({ className = "dp-top-button", compact 
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(null);
   const [apiKey, setApiKey] = useState("");
-  const [model, setModel] = useState("gemini-2.5-flash");
+  const [model, setModel] = useState("gemini-3.6-flash");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -14,7 +14,7 @@ export default function AiSettingsButton({ className = "dp-top-button", compact 
     try {
       const data = await get("/api/settings/ai");
       setStatus(data);
-      setModel(data.model || "gemini-2.5-flash");
+      setModel(data.model || "gemini-3.6-flash");
     } catch (err) { setMessage(err.message); }
   }
 
@@ -27,7 +27,7 @@ export default function AiSettingsButton({ className = "dp-top-button", compact 
       const data = await put("/api/settings/ai", { apiKey, model });
       setStatus({ ...status, ...data, hasKey: true });
       setApiKey("");
-      setMessage(data.note || "Kunci Gemini tersimpan di akunmu dan siap dipakai untuk generate serta AI chat.");
+      setMessage(data.note || "Kunci Gemini tersimpan di workspace dan siap dipakai untuk generate serta AI chat.");
     } catch (err) { setMessage(err.message); }
     setBusy(false);
   }
@@ -38,7 +38,7 @@ export default function AiSettingsButton({ className = "dp-top-button", compact 
       const data = await del("/api/settings/ai");
       setStatus(data);
       setApiKey("");
-      setMessage("Kunci akun dihapus. Provider lokal/environment dipakai kembali.");
+      setMessage("Kunci workspace dihapus. Provider environment/lokal dipakai kembali.");
     } catch (err) { setMessage(err.message); }
     setBusy(false);
   }
@@ -56,7 +56,7 @@ export default function AiSettingsButton({ className = "dp-top-button", compact 
     <Modal open={open} onClose={() => setOpen(false)} title="Pengaturan AI Gemini">
       <div className="dp-ai-settings">
         <div className={`dp-ai-state ${status?.hasKey ? "active" : ""}`} role="status">{stateLabel}</div>
-        <p className="dp-hint">Mode single-user: kunci disimpan di server workspace ini dan tidak dikirim kembali ke browser. Kunci ini dipakai untuk pembuatan project dan AI chat.</p>
+        <p className="dp-hint">Mode single-user: kunci default sudah tersimpan di server workspace dan tidak dikirim kembali ke browser. Model yang dipakai: <strong>gemini-3.6-flash</strong> (paling baik yang benar-benar bisa dipakai kunci ini; Gemini 4 / 3.1 Pro tidak punya kuota free tier).</p>
         <form className="dp-stack" onSubmit={save}>
           <label>API key Gemini
             <input className="dp-input" type="password" autoComplete="off" spellCheck="false" required
@@ -64,7 +64,7 @@ export default function AiSettingsButton({ className = "dp-top-button", compact 
               value={apiKey} onChange={e => setApiKey(e.target.value)} />
           </label>
           <label>Model
-            <input className="dp-input" value={model} onChange={e => setModel(e.target.value)} placeholder="gemini-2.5-flash" />
+            <input className="dp-input" value={model} onChange={e => setModel(e.target.value)} placeholder="gemini-3.6-flash" />
           </label>
           {message && <p className={message.includes("tersimpan") ? "dp-form-status" : "dp-form-error"} role="status">{message}</p>}
           <div className="dp-ai-actions">

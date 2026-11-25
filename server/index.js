@@ -9,7 +9,7 @@ import {
 } from "./db.js";
 import { generateSiteModel, editSiteModel, defaultDesignSystem, designMarkdown, makeSiteModel } from "./model.js";
 import { renderProjectHtml, renderPreviewHtml } from "./render.js";
-import { aiProvider, resolveAiConfig, maskKey, validateGeminiKey } from "./ai.js";
+import { aiProvider, resolveAiConfig, maskKey, validateGeminiKey, DEFAULT_GEMINI_MODEL } from "./ai.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(here, "..");
@@ -174,7 +174,7 @@ app.get("/api/settings/ai", auth, wrap((req, res) => {
 app.put("/api/settings/ai", auth, wrap(async (req, res) => {
   const apiKey = String(req.body.apiKey || "").trim();
   if (!apiKey) return res.status(400).json({ code: "MISSING_API_KEY", message: "API key Gemini wajib diisi." });
-  const model = String(req.body.model || process.env.GEMINI_MODEL || "gemini-2.5-flash").trim().slice(0, 80);
+  const model = String(req.body.model || process.env.GEMINI_MODEL || DEFAULT_GEMINI_MODEL).trim().slice(0, 80);
   const valid = await validateGeminiKey(apiKey, model);
   if (valid === false) return res.status(400).json({
     code: "INVALID_API_KEY",

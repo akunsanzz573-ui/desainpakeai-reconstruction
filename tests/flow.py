@@ -3,7 +3,7 @@
 Run with the server already listening on http://localhost:3000:
     python3 tests/flow.py
 """
-import json, urllib.request, urllib.error, http.cookiejar, time
+import json, urllib.request, urllib.error, http.cookiejar, time, re
 
 BASE = "http://localhost:3000"
 cj = http.cookiejar.CookieJar()
@@ -16,7 +16,7 @@ def call(method, path, data=None, expect=None):
     if body:
         req.add_header("content-type", "application/json")
     try:
-        with op.open(req, timeout=20) as r:
+        with op.open(req, timeout=60) as r:
             raw, status = r.read(), r.status
             ctype = r.headers.get("content-type", "")
     except urllib.error.HTTPError as e:
@@ -38,14 +38,24 @@ call("POST", "/api/reports", {"url": ".desainpakeai.com/contoh", "issue": "Lainn
 
 session = call("GET", "/api/auth/session", expect=200)
 assert session["user"] and session["authenticated"] is True
+assert session["provider"] == "gemini", session
 call("POST", "/api/checkout/intent", {"plan": "pro"}, expect=201)
+
+settings = call("GET", "/api/settings/ai", expect=200)
+assert settings["provider"] == "gemini" and settings["hasKey"] is True, settings
+assert settings["model"] == "gemini-3.6-flash", settings
 
 created = call("POST", "/api/projects", {"starter": {"prompt": "Buat landing page kedai kopi Senja dengan menu reservasi", "platform": "web", "look": "minimal"}}, expect=201)
 pid = created["project"]["id"]
-assert len(created["project"]["model"]["pages"]) >= 2
+assert len(created["project"]["model"]["pages"]) >= 1
+assert created["project"]["model"]["meta"]["generatedBy"] == "gemini", created["project"]["model"]["meta"]
 
+before_accent = created["project"]["model"]["theme"]["accent"]
 chat = call("POST", f"/api/projects/{pid}/chat", {"instruction": "Ubah warna tombol menjadi hijau"}, expect=200)
-assert chat["project"]["model"]["theme"]["accent"] == "#16734f"
+after_accent = chat["project"]["model"]["theme"]["accent"]
+assert re.fullmatch(r"#[0-9a-fA-F]{6}", after_accent), after_accent
+assert after_accent != before_accent, (before_accent, after_accent)
+assert chat["reply"].startswith("AI menerapkan instruksi"), chat["reply"]
 
 page = call("POST", f"/api/projects/{pid}/pages", {"title": "Pricing"}, expect=201)
 slug = page["project"]["model"]["pages"][-1]["slug"]
@@ -59,7 +69,7 @@ call("GET", f"/api/projects/{pid}/export?format=zip", expect=200)
 
 published = call("POST", f"/api/projects/{pid}/publish", {"slug": f"uji-{int(time.time())}", "gallery": True}, expect=200)
 site = call("GET", f"/sites/{published['slug']}", expect=200)
-assert "Kopi Senja" in site
+assert created["project"]["name"] in site or "Senja" in site
 call("GET", "/api/gallery", expect=200)
 call("POST", f"/api/projects/{pid}/unpublish", {}, expect=200)
 call("DELETE", f"/api/projects/{pid}", expect=200)

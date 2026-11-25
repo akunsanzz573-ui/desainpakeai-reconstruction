@@ -88,6 +88,8 @@ The reconstruction implements these shapes plus the additional endpoints needed 
 
 The reference settings screen is not publicly observable. To make AI generation usable locally, the reconstruction adds an “AI Gemini” menu on `/projects` and the canvas. It stores the workspace key in `user_ai_settings`, verifies key/model access with a lightweight Google API metadata request, and prioritizes that key over environment variables. Only a masked key is returned to the client. No reference behavior is claimed for this menu.
 
+The owner supplied a private key as the local default. Model availability was queried from `v1beta/models`: Gemini 4 variants and Gemini 3.1 Pro return `quota=0` on the free tier for this key; Gemini 3.8 Flash and 4 Hydrogen returned 503/high demand; Gemini 2.5 Flash is no longer available to new users. `gemini-3.6-flash` was verified end-to-end and is the configured default, with `gemini-3.5-flash` and `gemini-3.1-flash-lite` as automatic fallbacks. The key is stored in gitignored `.env` and the local SQLite workspace settings; it is not part of the repository.
+
 ## Single-user override
 
 At the owner's request, account login was removed from the reconstruction even though `/login` was observed in the reference. A local workspace user is created automatically, `/login` and `/admin` redirect to `/projects`, and logout/account UI was removed. The observed reference route table above is kept for research accuracy; it does not describe this deliberate local override.

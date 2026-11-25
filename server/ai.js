@@ -1,8 +1,11 @@
-// Server-side AI integration. Keys are read from a per-user database setting or
-// environment variables, and are never sent back to the browser. When no key is
-// configured the local rule-based engine in model.js is used instead.
+// Server-side AI integration. Keys are read from the single-user workspace
+// setting or environment variables, and are never sent back to the browser.
+// When no key is configured the local rule-based engine in model.js is used.
 
 import { db } from "./db.js";
+
+export const DEFAULT_GEMINI_MODEL = "gemini-3.6-flash";
+const GEMINI_FALLBACK_MODELS = ["gemini-3.5-flash", "gemini-3.1-flash-lite"];
 
 function extractJson(text) {
   if (!text) return null;
@@ -28,7 +31,7 @@ export function resolveAiConfig(userId) {
       provider: "gemini",
       source: "user",
       key: saved.gemini_api_key,
-      model: saved.gemini_model || process.env.GEMINI_MODEL || "gemini-2.5-flash"
+      model: saved.gemini_model || process.env.GEMINI_MODEL || DEFAULT_GEMINI_MODEL
     };
   }
   if (process.env.GEMINI_API_KEY) {
@@ -36,7 +39,7 @@ export function resolveAiConfig(userId) {
       provider: "gemini",
       source: "environment",
       key: process.env.GEMINI_API_KEY,
-      model: process.env.GEMINI_MODEL || "gemini-2.5-flash"
+      model: process.env.GEMINI_MODEL || DEFAULT_GEMINI_MODEL
     };
   }
   if (process.env.OPENAI_API_KEY) {
@@ -70,20 +73,46 @@ export async function validateGeminiKey(apiKey, model) {
   } catch { return null; }
 }
 
-async function gemini(system, user, key, model) {
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: system }] },
-      contents: [{ role: "user", parts: [{ text: user }] }],
-      generationConfig: { temperature: 0.4, responseMimeType: "application/json" }
-    })
-  });
-  if (!res.ok) throw new Error(`Gemini request failed: ${res.status}`);
-  const data = await res.json();
-  const text = data?.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || "";
-  return extractJson(text);
+function geminiModelOrder(preferred) {
+  return [...new Set([preferred || process.env.GEMINI_MODEL || DEFAULT_GEMINI_MODEL, ...GEMINI_FALLBACK_MODELS])];
+}
+
+async function gemini(system, user, key, preferred) {
+  let lastError = null;
+  for (const model of geminiModelOrder(preferred)) {
+    try {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: system }] },
+          contents: [{ role: "user", parts: [{ text: user }] }],
+          generationConfig: {
+            temperature: 0.4,
+            responseMimeType: "application/json",
+            maxOutputTokens: 8192,
+            thinkingConfig: { thinkingBudget: 0 }
+          }
+        })
+      });
+      if (!res.ok) {
+        const error = new Error(`Gemini ${model} failed: ${res.status}`);
+        error.status = res.status;
+        if ([400, 401, 403].includes(res.status)) throw error;
+        lastError = error;
+        continue;
+      }
+      const data = await res.json();
+      const text = data?.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || "";
+      const parsed = extractJson(text);
+      if (parsed) return parsed;
+      lastError = new Error(`Gemini ${model} returned no JSON`);
+    } catch (error) {
+      if ([400, 401, 403].includes(error.status)) throw error;
+      lastError = error;
+    }
+  }
+  throw lastError || new Error("Gemini unavailable");
 }
 
 async function openai(system, user, key, model) {

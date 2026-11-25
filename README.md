@@ -10,26 +10,28 @@ npm run build
 PORT=3000 npm start
 ```
 
+`npm start` loads a local `.env` file when present (`node --env-file-if-exists=.env`). The workspace is already configured with a server-side Gemini key and `GEMINI_MODEL=gemini-3.6-flash`; the key is ignored by Git via `.gitignore` and is never returned to the browser.
+
 Open <http://localhost:3000>. The SQLite database is created automatically at `data/app.sqlite`.
 
-Optional environment variables:
+Environment variables:
 
 ```bash
 GEMINI_API_KEY=...      # enables server-side Gemini JSON generation/editing
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=gemini-3.6-flash
 OPENAI_API_KEY=...      # alternative provider (Gemini takes precedence)
 OPENAI_MODEL=gpt-4o-mini
 PORT=3000
 ```
 
-Keys can also be entered per account through the “AI Gemini” menu after signing in; a user key takes precedence over environment variables. Keys are read only by the Node server and are never sent back to the browser. With no key configured, the app uses the deterministic local design engine; no live AI provider was exercised during reconstruction.
+The key can be replaced or removed from the “AI Gemini” menu; a saved workspace key takes precedence over environment variables. Keys are read only by the Node server and are never sent back to the browser. With no key configured, the app falls back to the deterministic local design engine.
 
 ## What works
 
 - Marketing routes `/`, `/pricing`, `/galeri`, `/updates`, `/templates` with the observed public markup, fonts, icons, thumbnails, layout references, and Indonesian copy.
 - Hero composer: prompt validation, App/Web toggle, PRD handoff menu, style menu, starter prompts, template/reference attachment, sign-in handoff, project creation.
 - **Single-user mode:** no sign-in screen. A local workspace user is created automatically on first request; `/login` redirects to `/projects` and the logout/account buttons are removed.
-- “AI Gemini” menu in `/projects` and the canvas: save, verify, replace, or delete the workspace Gemini API key. The key is stored server-side in SQLite and is never returned to the browser; generation and AI chat use it automatically.
+- “AI Gemini” menu in `/projects` and the canvas: save, verify, replace, or delete the workspace Gemini API key. The key is stored server-side in SQLite and is never returned to the browser; generation and AI chat use it automatically. Default model is `gemini-3.6-flash`, the best model verified with the supplied key; Gemini 4 and 3.1 Pro return zero free-tier quota for that key and 3.8 Flash was frequently unavailable.
 - `/projects`: searchable project list, creation modal, delete, publish, ZIP/HTML export links.
 - `/project/<id>/prototype`: canvas with page list, section outline, device/zoom controls, live iframe preview, AI chat, design tokens, version history/restore, DESIGN.md, exports, and publish dialog.
 - Real SQLite persistence for users, sessions, projects, versions, chat messages, published sites, catalog, updates, reports, and checkout intents.
@@ -55,6 +57,6 @@ Keys can also be entered per account through the “AI Gemini” menu after sign
 - Public publishing uses local `/sites/<slug>` paths, not the reference's custom `.desainpakeai.com` domains.
 - Admin, CLI, and some internal routes from the JS bundle are not reconstructed; they are not publicly observable without authenticated access.
 - Visual comparison was based on captured DOM, CSS, public assets, and page text. The analysis model could not visually inspect screenshots, so pixel-level equality is not claimed.
-- Live AI output depends on provider credentials and was not exercised; the local generator is deterministic and rule-based.
+- Live Gemini generation and editing are exercised against the configured key; if the provider is rate-limited or unavailable, the app falls back to the local rule-based generator. The exact AI model used by the reference product is not public.
 
 See `docs/RESEARCH.md` for observed routes, tokens, components, interactions, and evidence notes.

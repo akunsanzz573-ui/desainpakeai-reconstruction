@@ -222,7 +222,7 @@ export function sanitizeModel(input, fallback) {
     tagline: String(input.tagline || fallback.tagline).slice(0, 160),
     theme,
     pages,
-    meta: { ...(fallback.meta || {}), ...(input.meta || {}), generatedBy: input.meta?.generatedBy || "local" }
+    meta: { ...(fallback.meta || {}), ...(input.meta || {}), generatedBy: input.meta?.generatedBy || fallback.meta?.generatedBy || "local" }
   };
 }
 
