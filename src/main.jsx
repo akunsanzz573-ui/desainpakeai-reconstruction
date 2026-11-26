@@ -95,7 +95,7 @@ function TemplateOpen() {
       if (!window.localStorage.getItem("dpai:user")) {
         // Session cookies are authoritative; this call still works while unauthenticated.
       }
-      const { project } = await post(`/api/templates/${encodeURIComponent(id)}/use`, { prompt: `Buat website ${template.title}` });
+      const { project } = await post(`/api/templates/${encodeURIComponent(id)}/use`, { prompt: `Buat website ${template.title} dengan tampilan rapi dan siap dipublish` });
       window.location.replace(`/project/${project.id}/prototype`);
     }).catch(err => setState(err.message || "Template tidak dapat dibuka."));
   }, [id]);

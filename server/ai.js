@@ -65,7 +65,8 @@ export function maskKey(key) {
 export async function validateGeminiKey(apiKey, model) {
   try {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}?key=${encodeURIComponent(apiKey)}`, {
-      headers: { "content-type": "application/json" }
+      headers: { "content-type": "application/json" },
+      signal: AbortSignal.timeout(10000)
     });
     if (res.ok) return true;
     if (res.status === 400 || res.status === 401 || res.status === 403) return false;
@@ -84,6 +85,7 @@ async function gemini(system, user, key, preferred) {
       const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`, {
         method: "POST",
         headers: { "content-type": "application/json" },
+        signal: AbortSignal.timeout(15000),
         body: JSON.stringify({
           systemInstruction: { parts: [{ text: system }] },
           contents: [{ role: "user", parts: [{ text: user }] }],

@@ -210,12 +210,21 @@ export function sanitizeModel(input, fallback) {
   }
   theme.radius = Math.min(32, Math.max(0, Number(theme.radius) || fallback.theme.radius));
   theme.spacing = Math.min(40, Math.max(8, Number(theme.spacing) || fallback.theme.spacing));
-  const pages = Array.isArray(input.pages) && input.pages.length ? input.pages.map((p, i) => ({
-    id: p.id || id(),
-    slug: String(p.slug || `page-${i + 1}`).toLowerCase().replace(/[^a-z0-9-]/g, "-"),
-    title: String(p.title || `Halaman ${i + 1}`).slice(0, 80),
-    sections: Array.isArray(p.sections) && p.sections.length ? p.sections.map(s => sanitizeSection(s)).filter(Boolean) : []
-  })) : fallback.pages;
+  const seenSlugs = new Set();
+  const pages = Array.isArray(input.pages) && input.pages.length ? input.pages.map((p, i) => {
+    let slug = String(p.slug || "").toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "").slice(0, 48) || `page-${i + 1}`;
+    if (i === 0) slug = "index";
+    let suffix = 2;
+    while (seenSlugs.has(slug)) slug = `${slug}-${suffix++}`;
+    seenSlugs.add(slug);
+    return {
+      id: p.id || id(),
+      slug,
+      title: String(p.title || `Halaman ${i + 1}`).slice(0, 80),
+      sections: Array.isArray(p.sections) && p.sections.length ? p.sections.map(s => sanitizeSection(s)).filter(Boolean) : []
+    };
+  }) : fallback.pages;
   return {
     ...fallback,
     name: String(input.name || fallback.name).slice(0, 80),

@@ -228,7 +228,8 @@ app.post("/api/templates/:id/use", auth, wrap(async (req, res) => {
   const row = db.prepare("SELECT extra FROM catalog WHERE id = ?").get(req.params.id);
   if (!row) return res.status(404).json({ code: "NOT_FOUND", message: "Template tidak ditemukan." });
   const template = JSON.parse(row.extra);
-  const prompt = String(req.body.prompt || `Buat website ${template.title}`);
+  let prompt = String(req.body.prompt || `Buat website ${template.title}`);
+  if (prompt.trim().length < 20) prompt = `Buat website ${template.title} dengan tampilan rapi dan siap dipublish`;
   const project = await createProjectFor(req.user, { name: template.title, starter: { prompt, platform: "web", look: "auto", referenceIds: template.kind === "reference" ? [template.id] : [] }, templateId: template.id });
   res.status(201).json({ project });
 }));
@@ -386,6 +387,10 @@ app.post("/api/projects/:id/publish", auth, wrap((req, res) => {
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.writeFileSync(target, html);
   }
+  const rootFile = path.join(dir, "index.html");
+  if (!fs.existsSync(rootFile)) {
+    fs.writeFileSync(rootFile, renderProjectHtml(project, { activeSlug: project.model.pages[0]?.slug || "index", includeMeta: true }));
+  }
   fs.writeFileSync(path.join(dir, "DESIGN.md"), designMarkdown(project));
   const html = renderProjectHtml(project, { activeSlug: "index", includeMeta: true });
   db.prepare(`INSERT INTO published_sites (slug,project_id,version_id,html,title,visits,gallery,created_at,updated_at)
@@ -437,6 +442,7 @@ function templateThumbnail(req, res) {
 }
 app.get("/api/catalog/templates/:id/thumbnail", wrap(templateThumbnail));
 app.get("/api/project-templates/:id/thumbnail", wrap(templateThumbnail));
+app.get("/api/templates/:id/thumbnail", wrap(templateThumbnail));
 
 app.post("/api/checkout/intent", auth, wrap((req, res) => {
   const plan = String(req.body.plan || "");
@@ -445,7 +451,7 @@ app.post("/api/checkout/intent", auth, wrap((req, res) => {
   res.status(201).json({
     ok: true,
     plan,
-    note: "Pilihan paket tersimpan di akunmu. Pembayaran belum terhubung: tambahkan kredensial penyedia checkout di environment variable untuk mengaktifkannya."
+    note: "Pilihan paket tersimpan di workspace ini. Pembayaran belum terhubung: tambahkan kredensial penyedia checkout di environment variable untuk mengaktifkannya."
   });
 }));
 

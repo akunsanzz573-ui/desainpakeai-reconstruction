@@ -94,6 +94,18 @@ a { color: inherit; }
 .dp-mobile-menu a { padding: 10px 12px; border-radius: 8px; font-size: 14px; text-decoration: none; }
 .dp-mobile-menu a:hover { background: var(--desk); }
 
+/* Catalog tabs in the captured /templates markup are static; reflect state visually. */
+[role="tab"][aria-selected="true"] {
+  background: #fff !important;
+  color: var(--ink) !important;
+  box-shadow: 0 1px 3px rgba(35, 33, 38, .12);
+}
+[role="tab"][aria-selected="false"] {
+  background: transparent !important;
+  color: var(--muted) !important;
+  box-shadow: none !important;
+}
+
 /* Simple utility fallbacks for classes used in reconstructed app views */
 .sm\:rounded-\[1\.25rem\] { border-radius: 20px; }
 .sm\:rounded-\[1\.5rem\] { border-radius: 24px; }
