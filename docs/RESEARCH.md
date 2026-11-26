@@ -113,3 +113,5 @@ The owner supplied a private key as the local default. Model availability was qu
 ## Single-user override
 
 At the owner's request, account login was removed from the reconstruction even though `/login` was observed in the reference. A local workspace user is created automatically, `/login` and `/admin` redirect to `/projects`, and logout/account UI was removed. The observed reference route table above is kept for research accuracy; it does not describe this deliberate local override.
+
+For the consolidated REA evidence IDs, generation contract, pipeline labels, endpoint inventory, backend inference, and an honest parity checklist against the local implementation, see `docs/REFERENCE_REA_ANALYSIS.md`.

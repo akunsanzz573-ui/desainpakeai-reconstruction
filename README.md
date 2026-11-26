@@ -66,4 +66,4 @@ The key can be replaced or removed from the “AI Gemini” menu; a saved worksp
 - Live Gemini generation and editing are exercised against the configured key; provider calls have a short timeout and fall back to the local preset compiler when rate-limited, unavailable, or slow. The reference's server-side prompts, model, and token budget are not public; the prompts and presets here are derived from shipped bundles and public DESIGN.md/layout-token evidence, not copied from the reference backend.
 - The visual system follows the reference's component and layout patterns, but it is not pixel-identical: the reference's full template source, images, and brand copy are not reproduced, and no original reference logos/testimonials are inserted into generated pages.
 
-See `docs/RESEARCH.md` for observed routes, tokens, components, interactions, and evidence notes.
+See `docs/RESEARCH.md` for observed routes, tokens, components, interactions, and evidence notes. See `docs/REFERENCE_REA_ANALYSIS.md` for the full REA-backed frontend/backend breakdown, exact strings, Evidence IDs, and the honest parity checklist versus this reconstruction.
