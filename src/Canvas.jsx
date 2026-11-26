@@ -196,6 +196,8 @@ export default function Canvas({ projectId }) {
 
         {tab === "design" && <div className="dp-design-panel">
           <h3>Fondasi visual</h3>
+          <div className="dp-design-preset"><strong>{project.model.design?.label || project.model.design?.preset || "Editorial"}</strong><code>{project.model.design?.preset || "editorial"}</code></div>
+          {project.model.design?.rationale && <p className="dp-design-rationale">{project.model.design.rationale}</p>}
           <label>Warna aksen <input type="color" value={theme.accent || "#7438d0"} onChange={e => setProject(p => ({ ...p, model: { ...p.model, theme: { ...p.model.theme, accent: e.target.value } } }))} onBlur={e => saveTheme({ accent: e.target.value })} /></label>
           <label>Radius <input type="number" min="0" max="32" value={theme.radius || 12} onChange={e => setProject(p => ({ ...p, model: { ...p.model, theme: { ...p.model.theme, radius: Number(e.target.value) } } }))} onBlur={e => saveTheme({ radius: Number(e.target.value) })} /></label>
           <label>Spacing <input type="number" min="8" max="40" value={theme.spacing || 16} onChange={e => setProject(p => ({ ...p, model: { ...p.model, theme: { ...p.model.theme, spacing: Number(e.target.value) } } }))} onBlur={e => saveTheme({ spacing: Number(e.target.value) })} /></label>

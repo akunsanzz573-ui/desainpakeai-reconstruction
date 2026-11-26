@@ -83,6 +83,7 @@ function starterFrom(body) {
     prompt: String(starter.prompt || starter.text || ""),
     platform: starter.platform === "app" ? "app" : "web",
     look: String(starter.look || "auto"),
+    viewport: String(starter.viewport || body.viewport || "").slice(0, 80),
     referenceIds: Array.isArray(starter.referenceIds) ? starter.referenceIds : []
   };
 }
@@ -96,9 +97,14 @@ async function createProjectFor(user, body) {
     const row = db.prepare("SELECT extra FROM catalog WHERE id = ?").get(refId);
     return row ? JSON.parse(row.extra) : null;
   }).filter(Boolean);
-  const options = { prompt: starter.prompt, platform: starter.platform, look: starter.look, reference: references[0] || null, userId: user.id };
-  const model = body.templateId
-    ? (() => { const row = db.prepare("SELECT * FROM catalog WHERE id = ?").get(body.templateId); const t = row ? JSON.parse(row.extra) : null; return makeSiteModel({ ...options, prompt: `${starter.prompt} ${t?.title || ""}`, template: t }); })()
+  const templateRow = body.templateId ? db.prepare("SELECT extra FROM catalog WHERE id = ?").get(body.templateId) : null;
+  const template = templateRow ? JSON.parse(templateRow.extra) : null;
+  const options = {
+    prompt: starter.prompt, platform: starter.platform, look: starter.look,
+    viewport: starter.viewport, reference: references[0] || null, references, template, userId: user.id
+  };
+  const model = template
+    ? makeSiteModel({ ...options, prompt: `${starter.prompt} ${template.title || ""}`, template })
     : await generateSiteModel(options);
   const id = newId();
   const stamp = now();
@@ -107,7 +113,7 @@ async function createProjectFor(user, body) {
     name: String(body.name || model.name || "Project baru").slice(0, 80),
     prompt: starter.prompt,
     platform: starter.platform, look: starter.look,
-    model, design_system: defaultDesignSystem(model.theme),
+    model, design_system: defaultDesignSystem(model.theme, model.design),
     published_slug: null, gallery: 0, created_at: stamp, updated_at: stamp
   };
   db.prepare(`INSERT INTO projects (id,user_id,name,prompt,platform,look,model,design_system,published_slug,gallery,created_at,updated_at)
@@ -262,10 +268,14 @@ app.get("/api/projects/:id", auth, wrap((req, res) => res.json({ project: parseP
 
 app.patch("/api/projects/:id", auth, wrap((req, res) => {
   const project = getProject(req, res);
-  const name = req.body.name != null ? String(req.body.name).slice(0, 80) : project.name;
-  const model = req.body.model != null ? req.body.model : parseProject(project).model;
-  db.prepare("UPDATE projects SET name = ?, model = ?, updated_at = ? WHERE id = ?")
-    .run(name, JSON.stringify(model), now(), project.id);
+  const current = parseProject(project);
+  const name = req.body.name != null ? String(req.body.name).slice(0, 80) : current.name;
+  const model = req.body.model != null ? req.body.model : current.model;
+  const designSystem = req.body.model != null
+    ? defaultDesignSystem(model.theme || {}, model.design || {})
+    : current.design_system;
+  db.prepare("UPDATE projects SET name = ?, model = ?, design_system = ?, updated_at = ? WHERE id = ?")
+    .run(name, JSON.stringify(model), JSON.stringify(designSystem), now(), project.id);
   res.json({ project: parseProject(getProject(req, res)) });
 }));
 
@@ -284,7 +294,35 @@ app.delete("/api/projects/:id", auth, wrap((req, res) => {
 app.get("/api/projects/:id/prototype/preview", wrap((req, res) => {
   const row = db.prepare("SELECT * FROM projects WHERE id = ?").get(req.params.id);
   if (!row) return res.status(404).json({ code: "NOT_FOUND", message: "Project tidak ditemukan." });
-  res.type("html").send(renderPreviewHtml(parseProject(row), req.query.page || "index"));
+  res.type("html").send(renderPreviewHtml(parseProject(row), req.query.page || "index", req.params.id));
+}));
+
+app.get("/api/projects/:id/prototype/tokens", auth, wrap((req, res) => {
+  const project = parseProject(getProject(req, res));
+  res.json({
+    preset: project.model.design?.preset || "editorial",
+    design: project.model.design || {},
+    theme: project.model.theme || {},
+    designSystem: project.design_system || defaultDesignSystem(project.model.theme, project.model.design)
+  });
+}));
+
+app.get("/api/projects/:id/prototype/page-plans", auth, wrap((req, res) => {
+  const project = parseProject(getProject(req, res));
+  res.json({
+    pages: (project.model.pages || []).map(page => ({
+      id: page.id,
+      slug: page.slug,
+      title: page.title,
+      nodeId: `${page.slug}-root`,
+      sections: (page.sections || []).map((section, i) => ({
+        nodeId: `${page.slug}-${section.type}-${i + 1}`,
+        type: section.type,
+        title: section.title || section.quote || section.text || section.type,
+        summary: section.subtitle || section.body || section.note || ""
+      }))
+    }))
+  });
 }));
 
 app.post("/api/projects/:id/generate", auth, wrap(async (req, res) => {
@@ -293,7 +331,7 @@ app.post("/api/projects/:id/generate", auth, wrap(async (req, res) => {
   const prompt = starter.prompt || project.prompt;
   const model = await generateSiteModel({ prompt, platform: starter.platform || project.platform, look: starter.look || project.look, userId: req.user.id });
   db.prepare("UPDATE projects SET prompt = ?, platform = ?, look = ?, model = ?, design_system = ?, updated_at = ? WHERE id = ?")
-    .run(prompt, starter.platform || project.platform, starter.look || project.look, JSON.stringify(model), JSON.stringify(defaultDesignSystem(model.theme)), now(), project.id);
+    .run(prompt, starter.platform || project.platform, starter.look || project.look, JSON.stringify(model), JSON.stringify(defaultDesignSystem(model.theme, model.design)), now(), project.id);
   const updated = parseProject(getProject(req, res));
   snapshot(updated, "Generate ulang");
   res.json({ project: updated });
@@ -305,18 +343,21 @@ app.get("/api/projects/:id/messages", auth, wrap((req, res) => {
   res.json({ messages: rows });
 }));
 
-app.post("/api/projects/:id/chat", auth, wrap(async (req, res) => {
+async function projectChat(req, res) {
   const project = parseProject(getProject(req, res));
   const instruction = String(req.body.instruction || req.body.message || "").trim();
   if (!instruction) return res.status(400).json({ code: "EMPTY_INSTRUCTION", message: "Tulis instruksi terlebih dahulu." });
   db.prepare("INSERT INTO messages (id, project_id, role, text, created_at) VALUES (?,?,?,?,?)").run(newId(), project.id, "user", instruction, now());
   const { model, summary } = await editSiteModel(project.model, instruction, req.user.id);
-  db.prepare("UPDATE projects SET model = ?, updated_at = ? WHERE id = ?").run(JSON.stringify(model), now(), project.id);
+  db.prepare("UPDATE projects SET model = ?, design_system = ?, updated_at = ? WHERE id = ?")
+    .run(JSON.stringify(model), JSON.stringify(defaultDesignSystem(model.theme || {}, model.design || {})), now(), project.id);
   db.prepare("INSERT INTO messages (id, project_id, role, text, created_at) VALUES (?,?,?,?,?)").run(newId(), project.id, "assistant", summary, now());
   const updated = parseProject(getProject(req, res));
   snapshot(updated, "AI chat");
   res.json({ project: updated, reply: summary });
-}));
+}
+app.post("/api/projects/:id/chat", auth, wrap(projectChat));
+app.post("/api/projects/:id/prototype/ai-chat", auth, wrap(projectChat));
 
 app.post("/api/projects/:id/pages", auth, wrap((req, res) => {
   const project = parseProject(getProject(req, res));

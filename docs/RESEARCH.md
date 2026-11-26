@@ -77,6 +77,26 @@ Fonts: Geist Variable, Geist Mono, Inter Variable, Inter Tight Variable, Newsrea
 
 The reconstruction implements these shapes plus the additional endpoints needed for local persistence, chat, versions, publishing, export, reports, and checkout intents.
 
+## Shipped-bundle evidence for the generation pipeline
+
+All 85 JavaScript assets referenced by the public entry bundle were downloaded to `/tmp/opencode/refassets/all/` for local analysis. Relevant observations:
+
+- `live-code-canvas-CVlTHD6C.js` contains complete HTML/CSS page templates (for example `p-landing-aurora`, `p-landing-neobrutal`, `p-landing-terminal`), not just section JSON. Templates contain `data-node-id`, `data-route-link`, and `<!-- agent:page-sections -->` markers.
+- The same bundle defines a layout-system schema with `contentMax`, `padding`, `mobilePadding`, `gutter`, `sectionGap`, `itemGap`, `columns`, and `breakpoints`, and a `DESIGN.md` document used as the design contract.
+- Length tokens are validated as `px`/`rem` (or `var(--token, fallback)`); `columns` is `{mobile, tablet, desktop}` with integers 1–12 and non-decreasing values; `breakpoints` is `{tablet, desktop}` with `desktop > tablet`.
+- Geometry is emitted as `[data-layout-system]`, `[data-layout-container]`, `[data-layout-stack]`, `[data-layout-cluster]`, `[data-layout-grid]`, and span attributes `data-layout-span-mobile` / `data-layout-span-tablet` / `data-layout-span`. Columns change through `@container` queries, and mobile padding is applied under a max-width media query.
+- Page CSS is scoped with `@scope ([data-page-content="..."])`; global `@import` / `@font-face` / `@property` / `@namespace` are rejected. Templates use BEM-ish `p-landing-*` classes, stable `data-node-id`, and `data-route-link` for internal links.
+- A shared token stylesheet defines colors, fonts, a type scale (`heading-lg/md/sm`, `body-lg/md/sm`, `label-md`, `caption`), spacing, and radii. `DESIGN.md` can be regenerated from the rendered page using actual values.
+- Reference entries are curated, not copied: bundles repeatedly state that logos, copy, photography, proprietary fonts, and product screenshots are not copied from Ramp, Intercom, Duolingo, Cal.com, etc. References are converted to structure/hierarchy guidance while project tokens remain authoritative.
+- `starter-prompt-handoff-CWiAWe0A.js` stores `dpai.starter-prompt`, `dpai.starter-prd`, `dpai.starter-look`, `dpai.starter-references`, and `dpai.starter-draft` in session storage, and prefixes prompts with `[Tampilan: Desktop 1440 × 960 px]` or `[Tampilan: Mobile 390 × 844 px]`.
+- `hero-prompt-form-ovFXgDQd.js` saves the starter handoff, creates a project through `/api/projects`, and navigates to `/project/:id/prototype`; it does not render a design itself.
+- `projects-client-DBy_2yX9.js` reads project lists and caches `/api/projects/:id/prototype/preview`.
+- Extracted route strings also include `/api/chat`, `/api/projects/:id/prototype/ai-chat`, `/api/projects/:id/prototype/page-plans`, `/api/projects/:id/prototype/tokens`, `/api/project-templates`, and `/api/ai/models`.
+
+**Inference (not observed server behavior):** generation is template/token/agent-driven. The public bundle proves that full templates, layout geometry, node IDs, scoped CSS, and DESIGN.md exist; it does not reveal the server prompt or model. The reconstruction therefore implements a constrained design compiler: classify the brief into one of seven locally owned presets and one of ten locally owned visual patterns, normalize the exact observed layout-token shape, render through full component templates with container-query geometry, and make AI edit only the structured model under DESIGN.md constraints. References are folded into the prompt as section-order/hierarchy rules with an explicit "do not copy visuals" guard. This avoids the earlier failure mode where Gemini invented a generic small JSON model that was rendered with one fixed stylesheet.
+
+**What is deliberately not reproduced:** the bundled template strings (they contain reference-specific copy/art direction), reference brand assets, the 2.6 MB web-component runtime, AI-emitted HTML/CSS, global CSS inside page CSS, and reserved layout props (`content`, `headerActions`, `title`, `pageId`, `route`, `navKey`). The local renderer owns all markup and CSS; the model may only choose constrained tokens/patterns and copy.
+
 ## Unobservable limitations
 
 - Authenticated canvas state, AI prompts/responses, billing, admin screens, and CLI token flows cannot be observed from public requests.

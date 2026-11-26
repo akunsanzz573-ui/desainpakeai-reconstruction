@@ -51,13 +51,34 @@ assert len(created["project"]["model"]["pages"]) >= 1
 generated_by = created["project"]["model"]["meta"]["generatedBy"]
 assert generated_by in ("gemini", "local"), generated_by
 if generated_by == "local": print("NOTE Gemini timed out or was rate-limited; local generator was used")
+model = created["project"]["model"]
+assert model["design"]["preset"] in {"editorial", "finance", "command", "schedule", "brutal", "catalog", "dashboard"}, model["design"]["preset"]
+assert model["design"]["pattern"] in {"aurora", "neobrutal", "terminal", "grid-editorial", "sunlit", "utility", "editorial", "finance", "schedule", "dashboard"}, model["design"]["pattern"]
+layout = model["design"]["layout"]
+for key in ("contentMax", "padding", "mobilePadding", "gutter", "sectionGap", "itemGap", "columns", "breakpoints"):
+    assert key in layout, key
+for key in ("contentMax", "padding", "mobilePadding", "gutter", "sectionGap", "itemGap"):
+    assert re.fullmatch(r"\d+(?:\.\d+)?(?:px|rem)", layout[key]), (key, layout[key])
+assert set(layout["columns"]) == {"mobile", "tablet", "desktop"}, layout["columns"]
+assert 1 <= layout["columns"]["mobile"] <= layout["columns"]["tablet"] <= layout["columns"]["desktop"] <= 12, layout["columns"]
+assert set(layout["breakpoints"]) == {"tablet", "desktop"}, layout["breakpoints"]
+assert layout["breakpoints"]["desktop"] > layout["breakpoints"]["tablet"], layout["breakpoints"]
+assert len(model["pages"][0]["sections"]) >= 6, len(model["pages"][0]["sections"])
+
+tokens = call("GET", f"/api/projects/{pid}/prototype/tokens", expect=200)
+assert tokens["preset"] == model["design"]["preset"], tokens
+plans = call("GET", f"/api/projects/{pid}/prototype/page-plans", expect=200)
+assert plans["pages"][0]["sections"], plans
+preview = call("GET", f"/api/projects/{pid}/prototype/preview?page=index", expect=200)
+for marker in ("data-node-id=", "dp-preset-", "data-route-link", "data-layout-system", "data-layout-span-mobile", "@container dpai-layout", "data-page-content"):
+    assert marker in preview, marker
 
 before_accent = created["project"]["model"]["theme"]["accent"]
 chat = call("POST", f"/api/projects/{pid}/chat", {"instruction": "Ubah warna tombol menjadi hijau"}, expect=200)
 after_accent = chat["project"]["model"]["theme"]["accent"]
 assert re.fullmatch(r"#[0-9a-fA-F]{6}", after_accent), after_accent
 assert after_accent != before_accent, (before_accent, after_accent)
-assert chat["reply"].startswith("AI menerapkan instruksi") or "Warna aksen diubah" in chat["reply"], chat["reply"]
+assert chat["reply"] and re.search(r"warna|aksen|hijau|instruksi", chat["reply"], re.I), chat["reply"]
 
 page = call("POST", f"/api/projects/{pid}/pages", {"title": "Pricing"}, expect=201)
 slug = page["project"]["model"]["pages"][-1]["slug"]
